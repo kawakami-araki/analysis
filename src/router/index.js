@@ -4,8 +4,8 @@ import VueRouter from 'vue-router'
 import Index from '../views/index.vue'
 // import Pandect_total from '../components/Pandect_total.vue'
 import Base from '../components/Base.vue'
-import Label from '../components/label.vue'
 import Search from '../components/Search.vue'
+import Show from '../components/Show.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -17,8 +17,9 @@ const routes = [
     children: [
       // { path: '/pandect_total', component: Pandect_total },
       { path: '/base', component: Base },
-      { path: '/label', component: Label },
       { path: '/search', component: Search },
+      { path: '/show', component: Show },
+
     ]
   },
   // {

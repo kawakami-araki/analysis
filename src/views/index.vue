@@ -14,7 +14,6 @@
                 >
                 <el-menu-item index="/base">首页</el-menu-item>
                 <el-menu-item index="/search">搜索</el-menu-item>
-                <el-menu-item index="/label">创建新标签</el-menu-item>
             </el-menu>
         </el-header>
         <el-main>

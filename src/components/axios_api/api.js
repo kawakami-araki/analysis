@@ -14,7 +14,7 @@ export const base_file_data_from_get = p => axios_get("/app/get_base_file_data/"
 // 获取文件类型列表
 export const file_type_list_get = p => axios_get("/app/file_type_list/", p)
 // 搜索模块请求接口
-export const file_from_type_get = p => axios_get("/app/get_file_data/", p)
+export const file_data_from_get = p => axios_get("/app/get_file_data/", p)
 
 
 
@@ -31,6 +31,8 @@ export const label_list_from_get = p => axios_get("/app/getlabels/", p)
 
 // 创建标签的请求
 export const label_create_from_get = p => axios_get("/app/createlabel/", p)
+// 修改标签请求
+export const label_update_from_get = p => axios_get('/app/update_label/', p)
 
 
 
