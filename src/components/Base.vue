@@ -6,8 +6,11 @@
         <el-table-column prop="table_name" label="磁盘数据库" width="120">
         </el-table-column>
         <el-table-column prop="file_path" label="磁盘路径"> </el-table-column>
-        <el-table-column prop="file_path" label="磁盘使用情况统计图">
-            <div class="main" style="float:left;width:100%;height: 500px"></div>
+        <el-table-column label="磁盘使用情况统计图">
+            <template slot-scope="scope">
+                <div class="main" style="float:left;width:100%;height: 500px" @click='ClickBaseCearch(scopy.row)'></div>
+            </template>
+            
         </el-table-column>
     </el-table>
 </template>
@@ -32,16 +35,29 @@ export default {
         this.get_base_data_list();
     },
     methods: {
+        ClickBaseCearch(val) {
+            console.log(val)
+        },
         // 基础信息获取
         get_base_data() {
             file_from_base_get().then(res => {
-                console.log(res)
+                localStorage.setItem('base_file', JSON.stringify(res.data));
                 this.base_file_data = res.data;
             });
         },
         get_base_data_list() {
             base_file_data_from_get().then(res => {
+                
+                console.log(res)
                 this.create_pie_plot(res.data, res.type_list);
+                let type_list = [];
+                for(let i = 0;i < res.data.length;i++){
+                    for(let j = 0;j < res.data[i].length;j++){
+                        type_list.push(res.data[i][j].name);
+                    }
+                }
+                console.log(type_list)
+                localStorage.setItem('file_type', JSON.stringify(type_list));
             });
             
         },
@@ -54,15 +70,11 @@ export default {
             var myChart_4 = echarts.init(document.getElementsByClassName('main')[4]);
             var myChart_5 = echarts.init(document.getElementsByClassName('main')[5]);
             var myChart_list = [myChart_1, myChart_2,myChart_3, myChart_4, myChart_5]
-            console.log(myChart_list);
             for(var i=0;i<myChart_list.length;i++){
                 var pie_value = data[i];
                 if(pie_value.length == 0){
                     pie_value = [{'value':1, 'name':'None'}]
-                    console.log(1)
                 }
-                
-                console.log(pie_value)
                 myChart_list[i].setOption({
                     title : {
                         text: '',//主标题

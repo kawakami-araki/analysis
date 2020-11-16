@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import {file_type_list_get,file_from_base_get} from './axios_api/api.js'
+import {file_type_list_get} from './axios_api/api.js'
 export default {
     name: 'Search',
     data() {
@@ -168,14 +168,12 @@ export default {
     },
     methods: {
         handleCheckedTypesChange(value) {
-            // console.log(value)
             this.checkedTypes = value;
             let checkedCount = value.length;
             this.checkAll_type = checkedCount === this.types.length;
             this.isIndeterminate_type = checkedCount > 0 && checkedCount < this.types.length;
         },
         handleCheckedPathsChange(value) {
-            // console.log(value)
             this.checkedPaths = value;
             let checkedCount = value.length;
             this.checkAll_path = checkedCount === this.Paths.length;
@@ -183,36 +181,48 @@ export default {
         },
         // 获取文件类型列表
         get_file_type_list() {
+            let file_type = JSON.parse(localStorage.getItem('file_type'))
             file_type_list_get().then(res => {
-                this.file_type_list = this.types = res.data;
+                for(let i = 0;i < res.data.length;i++){
+                    for(let j = 0;j < file_type.length;j++){
+                        if(res.data[i].file_type == file_type[j]){
+                            if(this.file_type_list.indexOf({'file_type': file_type[j], 'id': res.data[i].id},-1) == -1){
+                                this.file_type_list.push({'file_type': file_type[j], 'id': res.data[i].id})
+                            }
+                            
+                        }
+                    }
+                }
+                console.log(this.file_type_list)
+                this.types = this.file_type_list
+                
             })
         },
         // 获取文件基础盘列表
         get_base_path() {
-            file_from_base_get().then(res =>{
-                this.file_path_list = this.Paths = res.data;
-            })
+            this.file_path_list = this.Paths = JSON.parse(localStorage.getItem('base_file'));
+            // file_from_base_get().then(res =>{
+            //     this.file_path_list = this.Paths = res.data;
+            // })
         },
         search_btn() {
-            let file_type, file_path, file_size;
+            let file_type, file_path, file_size, file_path_search;
             if(this.checkedTypes.length > 0 && this.search_type.length > 0){
                 file_type = this.checkedTypes.concat(this.search_type)
             }else{
                 if(this.checkedTypes.length == 0){file_type = this.search_type}else{file_type = this.checkedTypes}
-            }
-            if(this.checkedPaths.length > 0 && this.search_path.length > 0){
-                file_path = this.checkedPaths.concat(this.search_path)
-            }else{
-                if(this.checkedPaths.length == 0){file_path = this.search_path}else{file_path = this.checkedPaths}
             }
             if(this.file_size_value.length > 0){
                 file_size = this.file_size_value;
             }else{
                 file_size = [this.min_size, this.max_size];
             }
+            file_path = this.checkedPaths;
+            file_path_search = this.search_path;
             localStorage.clear();
             localStorage.setItem('search_file', JSON.stringify({
                 search_name: this.search_name,
+                file_path_search: file_path_search,
                 file_type: file_type,
                 file_path: file_path,
                 file_size: file_size

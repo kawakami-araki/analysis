@@ -136,7 +136,10 @@ export default {
             file_data_from_get({data: JSON.parse(localStorage.getItem('search_file'))}).then(res => {
                 // console.log(res.data);
                 if(res.data.length == 0){
-                    alert('未找到符合条件的数据, 请重新搜索');
+                    this.$message({
+                        type:'info',
+                        message: '未找到符合条件的数据, 请重新搜索'
+                    });
                     this.$router.push({path: '/search'})
                 }
                 this.file_data = res.data;
